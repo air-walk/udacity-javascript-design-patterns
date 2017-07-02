@@ -33,9 +33,14 @@ $(function() {
       cats[currentCatIndex]["numClicks"] = parseInt(cats[currentCatIndex]["numClicks"]) + 1;
       localStorage.cats = JSON.stringify(cats);
     },
-    addCat: function(name, imgSrc, numClicks) {
+    updateCat: function(name, imgSrc, numClicks) {
       var cats = this.getAllCats();
-      cats.push({ "name": name, "imgSrc": imgSrc, "numClicks": numClicks });
+      var currentCatIndex = model.getCurrentCatIndex();
+
+      cats[currentCatIndex]["name"]      = name;
+      cats[currentCatIndex]["imgSrc"]    = imgSrc;
+      cats[currentCatIndex]["numClicks"] = parseInt(numClicks);
+
       localStorage.cats = JSON.stringify(cats);
     }
   };
@@ -60,8 +65,8 @@ $(function() {
     incrementClicks: function() {
       model.incrementClicks();
     },
-    addCat: function(name, imgSrc, numClicks) {
-      model.addCat(name, imgSrc, numClicks);
+    updateCat: function(name, imgSrc, numClicks) {
+      model.updateCat(name, imgSrc, numClicks);
     }
   };
 
@@ -94,23 +99,21 @@ $(function() {
 
       // Bind form submission
       $adminForm.submit(function(e){
-        octopus.addCat($name.val(), $imgUrl.val(), $numClicks.val());
+        // octopus.addCat($name.val(), $imgUrl.val(), $numClicks.val());
+        octopus.updateCat($name.val(), $imgUrl.val(), $numClicks.val());
         view.renderHeader();
-
-        // Re-bind navbar click
+        view.renderContent();
+        $adminForm.hide();
+        
+        // Re-bind navbar elements
         view.bindNavbarElements();
 
-        // Reset forms
-        $cancelButton.click();        
         e.preventDefault();
       });
 
       // Bind Cancel button
       $cancelButton.click(function(e) {
-        $name.val('');
-        $imgUrl.val('');
-        $numClicks.val('');
-
+        $adminForm.hide();
         e.preventDefault();
       });
     },
@@ -130,6 +133,10 @@ $(function() {
       $("#cat-name").text(cat.name);
       $("#cat-image").attr("src", cat.imgSrc);
       $("#cat-num-clicks").text(cat.numClicks);
+
+      $("#name").val(cat.name);
+      $("#img-url").val(cat.imgSrc);
+      $("#num-clicks").val(cat.numClicks);
     },
     bindNavbarElements: function() {
       // Bind click events for header/navbar elements
