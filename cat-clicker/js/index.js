@@ -2,29 +2,40 @@ $(function() {
   var model = {
     init: function() {
       if (!localStorage.cats) {
-        var cats = [];
+        var cats            = [];
+        var currentCatIndex = 0;
+
         cats.push({ "name": "Lyle",    "imgSrc": "images/cat_picture0.jpeg", "numClicks": 0 });
         cats.push({ "name": "Beniga",  "imgSrc": "images/cat_picture1.jpeg", "numClicks": 0 });
         cats.push({ "name": "Anthony", "imgSrc": "images/cat_picture2.jpeg", "numClicks": 0 });
         cats.push({ "name": "Lee",     "imgSrc": "images/cat_picture3.jpeg", "numClicks": 0 });
         cats.push({ "name": "Vinh",    "imgSrc": "images/cat_picture4.jpeg", "numClicks": 0 });
-        localStorage.cats = JSON.stringify(cats);
+        localStorage.cats            = JSON.stringify(cats);
+        localStorage.currentCatIndex = currentCatIndex;
       }
     },
     getAllCats: function() {
       return JSON.parse(localStorage.cats);
     },
-    getCatAtIndex: function(index) {
-      var cats = this.getAllCats();
-      if (index <= cats.length - 1) {
-        return cats[index];
-      }
-
-      return;
+    getCurrentCatIndex: function() {
+      return localStorage.currentCatIndex;
     },
-    incrementClicks: function(index) {
+    setCurrentCatIndex: function(index) {
+      localStorage.currentCatIndex = index;
+    },
+    getCurrentCat: function() {
+      var index = model.getCurrentCatIndex();
+      return JSON.parse(localStorage.cats)[index];
+    },
+    incrementClicks: function() {
       var cats = this.getAllCats();
-      cats[index]["numClicks"] += 1;
+      var currentCatIndex = model.getCurrentCatIndex();
+      cats[currentCatIndex]["numClicks"] = parseInt(cats[currentCatIndex]["numClicks"]) + 1;
+      localStorage.cats = JSON.stringify(cats);
+    },
+    addCat: function(name, imgSrc, numClicks) {
+      var cats = this.getAllCats();
+      cats.push({ "name": name, "imgSrc": imgSrc, "numClicks": numClicks });
       localStorage.cats = JSON.stringify(cats);
     }
   };
@@ -37,11 +48,20 @@ $(function() {
     getAllCats: function() {
       return model.getAllCats();
     },
-    getCatAtIndex: function(index) {
-      return model.getCatAtIndex(index);
+    getCurrentCatIndex: function() {
+      return model.getCurrentCatIndex();
     },
-    incrementClicks: function(index) {
-      model.incrementClicks(index);
+    setCurrentCatIndex: function(index) {
+      model.setCurrentCatIndex(index);
+    },
+    getCurrentCat: function() {
+      return model.getCurrentCat();
+    },
+    incrementClicks: function() {
+      model.incrementClicks();
+    },
+    addCat: function(name, imgSrc, numClicks) {
+      model.addCat(name, imgSrc, numClicks);
     }
   };
 
@@ -49,21 +69,46 @@ $(function() {
     init: function() {
       this.catsList = $("#cats-list");
       view.renderHeader();
-
-      // Bind click events for header/navbar elements
-      $("#cats-list a").click(function() {
-        var catIndex = parseInt(this.id.replace("cat-", ""));
-        view.renderContent(catIndex);
-      });
-
+      view.bindNavbarElements();
       view.renderContent();
 
       // Bind click events for images
       $("#cat-image").click(function() {
-        var catIndex = parseInt(this.src.split("/").pop().replace("cat_picture", "").split(".")[0]);
+        octopus.incrementClicks();
+        view.renderContent();
+      });
 
-        octopus.incrementClicks(catIndex);
-        view.renderContent(catIndex);
+      // Bind Admin button
+      var $adminForm = $("#admin-form");
+      var $name      = $("#name");
+      var $imgUrl    = $("#img-url");
+      var $numClicks = $("#num-clicks");
+      var $cancelButton = $("#cancel-btn");
+
+      $("#admin-btn").click(function() {
+        $adminForm.toggle();
+      });
+
+      // Bind form submission
+      $adminForm.submit(function(e){
+        octopus.addCat($name.val(), $imgUrl.val(), $numClicks.val());
+        view.renderHeader();
+
+        // Re-bind navbar click
+        view.bindNavbarElements();
+
+        // Reset forms
+        $cancelButton.click();        
+        e.preventDefault();
+      });
+
+      // Bind Cancel button
+      $cancelButton.click(function(e) {
+        $name.val('');
+        $imgUrl.val('');
+        $numClicks.val('');
+
+        e.preventDefault();
       });
     },
     renderHeader: function() {
@@ -76,12 +121,19 @@ $(function() {
 
       this.catsList.html(htmlStr);
     },
-    renderContent: function(catIndex = 0) {
-      var cat = octopus.getCatAtIndex(catIndex);
+    renderContent: function() {
+      var cat = octopus.getCurrentCat();
 
       $("#cat-name").text(cat.name);
       $("#cat-image").attr("src", cat.imgSrc);
       $("#cat-num-clicks").text(cat.numClicks);
+    },
+    bindNavbarElements: function() {
+      // Bind click events for header/navbar elements
+      $("#cats-list a").click(function() {
+        octopus.setCurrentCatIndex(this.id.replace("cat-", ""));
+        view.renderContent();
+      });
     }
   };
 
