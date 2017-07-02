@@ -85,6 +85,9 @@ $(function() {
       var $numClicks = $("#num-clicks");
       var $cancelButton = $("#cancel-btn");
 
+      // Hide form by default
+      $adminForm.hide();
+
       $("#admin-btn").click(function() {
         $adminForm.toggle();
       });
