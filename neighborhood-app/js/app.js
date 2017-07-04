@@ -26,6 +26,21 @@ var ViewModel = function() {
     console.log("Setting current marker as: " + marker.name());
     self.currentMarker(marker);
   };
+
+  this.searchQuery = ko.observable('');
+  this.filteredMarkers = ko.computed(function() {
+    var searchQueryStr = self.searchQuery().toLowerCase();
+
+    if(!searchQueryStr) {
+      return self.markers();
+    } else {
+      return ko.utils.arrayFilter(self.markers(), function(marker) {
+        return marker.name().toLowerCase().indexOf(searchQueryStr) != -1;
+      });
+    }
+  }, this);
+
+
 }
 
 ko.applyBindings(new ViewModel());
