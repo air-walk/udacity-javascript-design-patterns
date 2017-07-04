@@ -33,11 +33,17 @@
             <li><a data-bind="text: name, click: $parent.setCurrentMarker" href="#"></a></li>
           </ul>
         </div>
+
+        <div class="col-md-4">
+          <h2>Links from Wikipedia</h2>
+          <ul id="wikipedia-links">Click on a location on the left or a marker in the map...</ul>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Load JS files -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="js/lib/knockout-3.4.2.js"></script>  
   <script src="js/app.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
