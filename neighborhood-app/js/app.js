@@ -8,6 +8,7 @@ var loadWikiInfo = function(queryStr) {
       $wikiElem.text("Failed to get information from Wikipedia :(");
   }, 8000);
 
+  /* AJAX for fetching data from Wikipedia and loading it into the DOM */
   $.ajax({
     url:      wikiUrl,
     dataType: "jsonp",
@@ -26,6 +27,7 @@ var loadWikiInfo = function(queryStr) {
   });
 }
 
+/* Predefined locations in the neighborhood */
 var locations = [
   { name: "Badarpur, Delhi",         lat: 28.493498,  lng: 77.302969         },
   { name: "Sector 28 Metro Station", lat: 28.4382752, lng: 77.30896249999999 },
@@ -34,12 +36,14 @@ var locations = [
   { name: "Neelam Chowk Ajronda",    lat: 28.3976295, lng: 77.31232519999999 }
 ];
 
+/* Marker representation */
 var Marker = function(data) {
   this.name = ko.observable(data.name);
   this.lat  = ko.observable(data.lat);
   this.lng  = ko.observable(data.lng);
 }
 
+/* ViewModel for Knockout */
 var ViewModel = function() {
   var self     = this;
   this.markers = ko.observableArray([]);
@@ -76,15 +80,17 @@ function initMap() {
     center: { lat: 28.422814,  lng: 77.310278 }
   });
 
+  /* Add markers to the map and bind click events for them */
   viewModel.filteredMarkers().forEach(function(filteredMarker) {
     var marker = new google.maps.Marker({ position: new google.maps.LatLng(filteredMarker.lat(), filteredMarker.lng()), map: map, title: filteredMarker.name()});
 
     google.maps.event.addListener(marker, 'click', function() {
       // console.log("Clicked " + marker.getTitle() + " at location: "+ marker.getPosition());
-      loadWikiInfo(marker.getTitle());
+      viewModel.setCurrentMarker(filteredMarker);
     });
   });
 }
 
+/* Applying bindings in Knockout */
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
