@@ -46,23 +46,18 @@ var ViewModel = function() {
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
 
-
 /* Callback method for rendering Google Map */
 function initMap() {
-  var markers = [];
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom:   11,
+    center: { lat: 28.422814,  lng: 77.310278 }
+  });
 
   viewModel.filteredMarkers().forEach(function(filteredMarker) {
-    markers.push({ lat: filteredMarker.lat(), lng: filteredMarker.lng() });
-  });
+    var marker = new google.maps.Marker({ position: new google.maps.LatLng(filteredMarker.lat(), filteredMarker.lng()), map: map, title: filteredMarker.name()});
 
-
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 11,
-    center: markers[0]
-  });
-
-  console.log(markers);
-  markers.forEach(function(marker) {
-    new google.maps.Marker({ position: marker, map: map });
+    google.maps.event.addListener(marker, 'click', function() {
+      console.log("Clicked " + marker.getTitle() + " at location: "+ marker.getPosition());
+    });
   });
 }
