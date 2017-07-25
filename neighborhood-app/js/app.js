@@ -1,3 +1,6 @@
+/* Variable to hold the map */
+var map;
+
 /* Wikipedia info */
 var loadWikiInfo = function(queryStr) {
   var $wikiElem = $('#wikipedia-links');
@@ -78,7 +81,7 @@ var ViewModel = function() {
 
 /* Callback method for rendering Google Map */
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 28.422814,  lng: 77.310278 },
     zoom:   11
   });
@@ -87,7 +90,7 @@ function initMap() {
   viewModel.filteredMarkers().forEach(function(filteredMarker) {
     var marker = new google.maps.Marker({ position: new google.maps.LatLng(filteredMarker.lat(), filteredMarker.lng()), map: map, title: filteredMarker.name()});
 
-    google.maps.event.addListener(marker, 'click', function() {
+    marker.addListener('click', function() {
       // console.log("Clicked " + marker.getTitle() + " at location: "+ marker.getPosition());
       viewModel.setCurrentMarker(filteredMarker);
     });
