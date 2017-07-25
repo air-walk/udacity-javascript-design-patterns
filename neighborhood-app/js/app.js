@@ -93,6 +93,12 @@ function initMap() {
     marker.addListener('click', function() {
       // console.log("Clicked " + marker.getTitle() + " at location: "+ marker.getPosition());
       viewModel.setCurrentMarker(filteredMarker);
+
+      // Make the selected marker bounce twice
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        marker.setAnimation(null);
+      }, 1400);
     });
   });
 }
