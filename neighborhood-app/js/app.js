@@ -47,9 +47,9 @@ var loadWikiInfo = function(queryStr) {
 var ViewModel = function() {
   var self         = this;
   self.vmMarkers   = ko.observableArray([]);
-  this.searchQuery = ko.observable('');
+  self.searchQuery = ko.observable('');
 
-  this.filteredMarkers = ko.computed(function() {
+  self.filteredMarkers = ko.computed(function() {
     var searchQueryStr = self.searchQuery().toLowerCase();
     var selectedMarkers;
 
@@ -69,6 +69,10 @@ var ViewModel = function() {
     return selectedMarkers;
   }, this);
 
+
+  self.locationClick = function() {
+    new google.maps.event.trigger(this, 'click');
+  };
 }
 
 function removeMarkersFromMap() {
