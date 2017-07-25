@@ -4,9 +4,9 @@ var loadWikiInfo = function(queryStr) {
   $wikiElem.text("");
 
   var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + queryStr + '&format=json&callback=wikiCallback';
-  var wikiRequestTimeout = setTimeout(function(){
-      $wikiElem.text("Failed to get information from Wikipedia :(");
-  }, 8000);
+  var wikiRequestTimeout = setTimeout(function() {
+      $wikiElem.text("Failed to get information from Wikipedia, please try again after sometime :(");
+  }, 3000);
 
   /* AJAX for fetching data from Wikipedia and loading it into the DOM */
   $.ajax({
@@ -23,6 +23,9 @@ var loadWikiInfo = function(queryStr) {
       };
 
       clearTimeout(wikiRequestTimeout);
+    },
+    fail: function(response) {
+      $wikiElem.append('<li>Sorry, we were unable to retrieve information from Wikipedia :(</li>');
     }
   });
 }
