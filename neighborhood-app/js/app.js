@@ -1,6 +1,7 @@
 /* Variable to hold the map and all markers */
 var map;
 var markers = [];
+var infoWindow;
 
 /* Predefined locations in the neighborhood */
 var locations = [
@@ -12,14 +13,13 @@ var locations = [
 ];
 
 /* Wikipedia info */
-var loadWikiInfo = function(queryStr) {
-  var $wikiElem = $('#wikipedia-links');
-  $wikiElem.text("");
+var loadWikiInfo = function(marker) {
 
-  var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + queryStr + '&format=json&callback=wikiCallback';
+  var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json&callback=wikiCallback';
   var wikiRequestTimeout = setTimeout(function() {
-      $wikiElem.text("Failed to get information from Wikipedia, please try again after sometime :(");
+    populateInfoWindow(marker, "Failed to get information from Wikipedia, please try again after sometime :(");
   }, 3000);
+  var content = '';
 
   /* AJAX for fetching data from Wikipedia and loading it into the DOM */
   $.ajax({
@@ -32,13 +32,15 @@ var loadWikiInfo = function(queryStr) {
       for (var i = 0; i < articleList.length; i++) {
         articleStr = articleList[i];
         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-        $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
+        content += ('<li><a href="' + url + '">' + articleStr + '</a></li>');
       };
 
+      populateInfoWindow(marker, content);
       clearTimeout(wikiRequestTimeout);
     },
     fail: function(response) {
-      $wikiElem.append('<li>Sorry, we were unable to retrieve information from Wikipedia :(</li>');
+      content = '<li>Sorry, we were unable to retrieve information from Wikipedia :(</li>'
+      populateInfoWindow(marker, content);
     }
   });
 }
@@ -87,6 +89,21 @@ function renderMarkersOnMap(selectedMarkers) {
   }
 }
 
+function populateInfoWindow(marker, content) {
+  if (infoWindow.marker != marker) {
+    infoWindow.marker = marker;
+    infoWindow.setContent('<div>' + '<h3>' + marker.title + '</h3>' + content + '</div>');
+    infoWindow.open(map, marker);
+
+    // Make sure the marker property is cleared if the infoWindow is closed
+    infoWindow.addListener('closeclick', function() {
+      infoWindow.marker = null;
+    });
+  } else {
+    infoWindow.open(map, marker);
+  }
+}
+
 /* Callback method for rendering Google Map */
 function initMap() {
   /* Render the map */
@@ -94,6 +111,8 @@ function initMap() {
     center: { lat: 28.422814,  lng: 77.310278 },
     zoom:   11
   });
+
+  infoWindow = new google.maps.InfoWindow();
 
   /* Add markers to the map and markers array, and bind click events for them */
   for (var i = 0; i < locations.length; i++) {
@@ -114,7 +133,7 @@ function initMap() {
       }, 1400);
 
       // Diplay info from Wikipedia about this place
-      loadWikiInfo(thisMarker.title);
+      loadWikiInfo(thisMarker);
     });
   }
 
