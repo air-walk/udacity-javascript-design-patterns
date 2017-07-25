@@ -79,8 +79,8 @@ var ViewModel = function() {
 /* Callback method for rendering Google Map */
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom:   11,
-    center: { lat: 28.422814,  lng: 77.310278 }
+    center: { lat: 28.422814,  lng: 77.310278 },
+    zoom:   11
   });
 
   /* Add markers to the map and bind click events for them */
