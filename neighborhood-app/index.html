@@ -23,6 +23,24 @@
     </div>
   </nav>
 
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2 collapse show" id="sidebar">
+        <h3>Locations</h3>
+        <input data-bind="textInput: searchQuery" id="search" type="text" class="form-control" placeholder="Search locations..." autocomplete="off">
+
+        <br>
+
+        <ul data-bind="foreach: filteredMarkers" class="nav nav-pills nav-stacked">
+          <li><a data-bind="text: name, click: $parent.setCurrentMarker" href="#"></a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Load JS files -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
