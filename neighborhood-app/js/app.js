@@ -51,17 +51,36 @@ var ViewModel = function() {
 
   this.filteredMarkers = ko.computed(function() {
     var searchQueryStr = self.searchQuery().toLowerCase();
+    var selectedMarkers;
 
     if(!searchQueryStr) {
-      return self.vmMarkers();
+      selectedMarkers = self.vmMarkers();
     } else {
-
-      return ko.utils.arrayFilter(self.vmMarkers(), function(marker) {
+      selectedMarkers = ko.utils.arrayFilter(self.vmMarkers(), function(marker) {
         return marker.title.toLowerCase().indexOf(searchQueryStr) != -1;
       });
+
+      selectedMarkers;
     }
+
+    removeMarkersFromMap();
+    renderMarkersOnMap(selectedMarkers);
+
+    return selectedMarkers;
   }, this);
 
+}
+
+function removeMarkersFromMap() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+}
+
+function renderMarkersOnMap(selectedMarkers) {
+  for(var i = 0; i < selectedMarkers.length; i++) {
+    selectedMarkers[i].setMap(map);
+  }
 }
 
 /* Callback method for rendering Google Map */
