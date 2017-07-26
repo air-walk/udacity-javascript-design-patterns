@@ -5,11 +5,11 @@ var infoWindow;
 
 /* Predefined locations in the neighborhood */
 var locations = [
-  { title: "Badarpur, Delhi",         position: { lat: 28.493498,  lng: 77.302969         }},
-  { title: "Sector 28 Metro Station", position: { lat: 28.4382752, lng: 77.30896249999999 }},
-  { title: "Badkhal Mor",             position: { lat: 28.422814,  lng: 77.310278         }},
-  { title: "Faridabad Old",           position: { lat: 28.410672,  lng: 77.31134          }},
-  { title: "Neelam Chowk Ajronda",    position: { lat: 28.3976295, lng: 77.31232519999999 }}
+  { title: 'Badarpur, Delhi',         position: { lat: 28.493498,  lng: 77.302969         }},
+  { title: 'Sector 28 Metro Station', position: { lat: 28.4382752, lng: 77.30896249999999 }},
+  { title: 'Badkhal Mor',             position: { lat: 28.422814,  lng: 77.310278         }},
+  { title: 'Faridabad Old',           position: { lat: 28.410672,  lng: 77.31134          }},
+  { title: 'Neelam Chowk Ajronda',    position: { lat: 28.3976295, lng: 77.31232519999999 }}
 ];
 
 /* Wikipedia info */
@@ -17,15 +17,15 @@ var loadWikiInfo = function(marker) {
 
   var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json&callback=wikiCallback';
   var wikiRequestTimeout = setTimeout(function() {
-    populateInfoWindow(marker, "Failed to get information from Wikipedia, please try again after sometime :(");
+    populateInfoWindow(marker, 'Failed to get information from Wikipedia, please try again after sometime :(');
   }, 3000);
   var content = '';
 
   /* AJAX for fetching data from Wikipedia and loading it into the infoWindow */
   $.ajax({
     url:      wikiUrl,
-    dataType: "jsonp",
-    jsonp:    "callback",
+    dataType: 'jsonp',
+    jsonp:    'callback',
     success: function(response) {
       var articleList = response[1];
 
