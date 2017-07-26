@@ -122,9 +122,8 @@ function initMap() {
     var marker = new google.maps.Marker({position: position, map: map, title: title, id: i});
     markers.push(marker);
 
-    marker.addListener('click', function() {
+    markerClick = function() {
       var thisMarker = this;
-      // console.log("Clicked " + thisMarker.getTitle() + " at location: "+ thisMarker.getPosition());
 
       // Make the selected marker bounce twice
       thisMarker.setAnimation(google.maps.Animation.BOUNCE);
@@ -134,7 +133,9 @@ function initMap() {
 
       // Diplay info from Wikipedia about this place
       loadWikiInfo(thisMarker);
-    });
+    };
+
+    marker.addListener('click', markerClick);
   }
 
   for (i = 0; i < markers.length; i++) {
