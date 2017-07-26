@@ -38,7 +38,7 @@ var loadWikiInfo = function(marker) {
       populateInfoWindow(marker, content);
       clearTimeout(wikiRequestTimeout);
     },
-    fail: function(response) {
+    error: function(response) {
       content = '<li>Sorry, we were unable to retrieve information from Wikipedia :(</li>';
       populateInfoWindow(marker, content);
     }
@@ -137,8 +137,16 @@ function initMap() {
     marker.addListener('click', markerClick);
   }
 
-  for (i = 0; i < markers.length; i++) {
-    viewModel.vmMarkers.push(markers[i]);
+  for (var j = 0; j < markers.length; j++) {
+    viewModel.vmMarkers.push(markers[j]);
+  }
+}
+
+/* Callback method for handling Google Map errors */
+function mapError() {
+  if (alert("Sorry, we were unable to render the Google Map. Please try reloading the page by clicking OK.")) {
+  } else {
+    window.location.reload();
   }
 }
 
