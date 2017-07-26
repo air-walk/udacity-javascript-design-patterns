@@ -21,7 +21,7 @@ var loadWikiInfo = function(marker) {
   }, 3000);
   var content = '';
 
-  /* AJAX for fetching data from Wikipedia and loading it into the DOM */
+  /* AJAX for fetching data from Wikipedia and loading it into the infoWindow */
   $.ajax({
     url:      wikiUrl,
     dataType: "jsonp",
