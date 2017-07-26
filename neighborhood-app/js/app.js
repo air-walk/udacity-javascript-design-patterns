@@ -33,17 +33,17 @@ var loadWikiInfo = function(marker) {
         articleStr = articleList[i];
         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
         content += ('<li><a href="' + url + '">' + articleStr + '</a></li>');
-      };
+      }
 
       populateInfoWindow(marker, content);
       clearTimeout(wikiRequestTimeout);
     },
     fail: function(response) {
-      content = '<li>Sorry, we were unable to retrieve information from Wikipedia :(</li>'
+      content = '<li>Sorry, we were unable to retrieve information from Wikipedia :(</li>';
       populateInfoWindow(marker, content);
     }
   });
-}
+};
 
 /* ViewModel for Knockout */
 var ViewModel = function() {
@@ -75,7 +75,7 @@ var ViewModel = function() {
   self.locationClick = function() {
     new google.maps.event.trigger(this, 'click');
   };
-}
+};
 
 function removeMarkersFromMap() {
   for (var i = 0; i < markers.length; i++) {
@@ -137,7 +137,7 @@ function initMap() {
     });
   }
 
-  for (var i = 0; i < markers.length; i++) {
+  for (i = 0; i < markers.length; i++) {
     viewModel.vmMarkers.push(markers[i]);
   }
 }
