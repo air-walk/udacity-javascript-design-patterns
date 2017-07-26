@@ -114,6 +114,19 @@ function initMap() {
 
   infoWindow = new google.maps.InfoWindow();
 
+  markerClick = function() {
+    var thisMarker = this;
+
+    // Make the selected marker bounce twice
+    thisMarker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function() {
+      thisMarker.setAnimation(null);
+    }, 1400);
+
+    // Diplay info from Wikipedia about this place
+    loadWikiInfo(thisMarker);
+  };
+
   /* Add markers to the map and markers array, and bind click events for them */
   for (var i = 0; i < locations.length; i++) {
     var position = locations[i].position;
@@ -121,20 +134,6 @@ function initMap() {
 
     var marker = new google.maps.Marker({position: position, map: map, title: title, id: i});
     markers.push(marker);
-
-    markerClick = function() {
-      var thisMarker = this;
-
-      // Make the selected marker bounce twice
-      thisMarker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function() {
-        thisMarker.setAnimation(null);
-      }, 1400);
-
-      // Diplay info from Wikipedia about this place
-      loadWikiInfo(thisMarker);
-    };
-
     marker.addListener('click', markerClick);
   }
 
