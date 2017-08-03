@@ -1,5 +1,5 @@
 # Udacity - Javascript Design Patterns
-This repo contains solved exercises for Udacity's *Javascript Design Patterns* course alongwith the **Neighborhood app** website code. That app uses the **Google Maps API** to render a map (and markers), **KnockoutJS** for JavaS code organization using MVVM design pattern, **Bootstrap** for styling and responsiveness and the **Wikipedia API** for fetching additional information about places.
+This repo contains solved exercises for Udacity's [Javascript Design Patterns](https://www.udacity.com/course/javascript-design-patterns--ud989) course alongwith the **Neighborhood app** website code. That app uses the **Google Maps API** to render a map (and markers), **KnockoutJS** for JavaS code organization using MVVM design pattern, **Bootstrap** for styling and responsiveness and the **Wikipedia API** for fetching additional information about places.
 
 ## Prerequisites:
 1. Execute the following commands in your terminal:
